@@ -1,0 +1,108 @@
+{% extends "myadmin/adminCommon.html" %}
+{% block myadmin_title%}
+  创建分类和标签 | winton
+{% endblock %}
+
+{% block classification_add%}
+<div class="row">
+	<div class="col s5 offset-s1">
+        <br />
+        <br />
+        <h5 class="left-align">已有分类</h5>
+        <div class="divider"></div>
+        <br />
+        <div class="c-chips"></div>
+        	{% block cls%}
+        		{%for cl in cls%}
+        			<div class="chip">{{cl.title}}</div>
+        		{% endfor %}
+        	{% endblock%}
+        <div class="divider"></div>
+        <h5 class="left-align btn red lighten-2">新分类</h5>
+        <div class="chips chip-classi"></div>
+        <form action="{% url 'myadmin:save_classi' %}" method="POST" id="new_classi">
+        	{% csrf_token%}
+        	<input type="submit" name="submit" value="提交" class="waves-effect waves-light btn right-align red lighten-1" id="csubmit">
+        	<input style="display:none" type="text" name="newClassis" id="newClassis">
+        </form>
+    </div>
+
+    <div class="col s5">
+        <br />
+        <br />
+        <h5 class="left-align">已有标签</h5>
+        <div class="divider"></div>
+        <br />
+        <div class="t-chips">
+        	{% block tags%}
+        		{%for tag in tags%}
+        			<div class="chip">{{tag.title}}</div>
+        		{% endfor %}
+        	{% endblock%}
+        </div>
+        <div class="divider"></div>
+        <h5 class="left-align btn red lighten-2">新标签</h5>
+        <div class="chips chip-tag"></div>
+        <form action="{% url 'myadmin:save_tag' %}" method="POST" id="new_tag">
+        	{% csrf_token%}
+        	<input type="submit" name="submit" value="提交" class="waves-effect waves-light btn right-align red lighten-1" id="tsubmit">
+        	<input style="display:none" type="text" name="newTags" id="newTags">
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		 $('.chips').material_chip();
+		 $('#new_classi').submit(function(event) {
+		 	/* Act on the event */
+		 	var data =  $('.chip-classi').material_chip('data');
+		 	if (data.length == 0){
+		 		alert("标签为空");
+		 		return false;
+		 	}else{
+		 		var value = new Array();
+		 		for (var i = 0; i < data.length; i++) {
+		 			value.push(data[i]['tag']);
+		 		}
+		 		$("#newClassis").val(value.join(","));
+		 		$.ajax({
+                    type: "POST",
+                    data: $("#new_classi").serialize(),
+                    url: "{% url 'myadmin:save_classi' %}",
+                    cache: false,
+                    dataType: "html",
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("保存出错!" + errorThrown);
+                    }
+                });
+		 	}
+		 });
+
+		 $('#new_tag').submit(function(event) {
+		 	/* Act on the event */
+		 	var data =  $('.chip-tag').material_chip('data');
+		 	if (data.length == 0){
+		 		alert("标签为空");
+		 		return false;
+		 	}else{
+		 		var value = new Array();
+		 		for (var i = 0; i < data.length; i++) {
+		 			value.push(data[i]['tag']);
+		 		}
+		 		$("#newTags").val(value.join(","));
+		 		$.ajax({
+                    type: "POST",
+                    data: $("#new_tag").serialize(),
+                    url: "{% url 'myadmin:save_tag' %}",
+                    cache: false,
+                    dataType: "html",
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("保存出错!" + errorThrown);
+                    }
+                });
+		 	}
+		 });
+	</script>
+{% endblock %}

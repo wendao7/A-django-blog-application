@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        {% load static %}
+        <title>{% block myadmin_title %}{% endblock %}</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link type="text/css" rel="stylesheet" href={% static "/blog/css/materialize.min.css" %}  media="screen,projection"/>
+        <link rel="stylesheet" href={% static "/myadmin/css/style.css" %}/>
+        {% block css%}
+        {% endblock %}
+    </head>
+    <body>
+        <div class="row right" id="menu">
+            <div class="col s1">
+                <a href="#" data-activates="slide-out" class="button-collapse right-align btn-large red lighten-1"><i class="material-icons">menu</i></a>
+            </div>
+        </div>
+
+        <ul id="slide-out" class="side-nav">
+            <li><div class="userView">
+              <div class="background">
+                <img style="width:250px;height: 210px" src={% static "/myadmin/images/rma1.jpg" %}>
+              </div>
+              <a href="#!name"><span class="white-text name">Winton Wen</span></a>
+              <a href="#!email"><span class="white-text email">changjiang.wen@foxmail.com</span></a>
+            </div></li>
+            <li><a href="{% url 'myadmin:bloglist' %}" class="waves-effect"><i class="material-icons">equalizer</i>博客列表</a></li>
+            <li><div class="divider"></div></li>
+            <li><a href="{% url 'myadmin:create_blog' %}" class="waves-effect"><i class="material-icons">chat</i>创建博客</a></li>
+            <li><div class="divider"></div></li>
+            <li><a href="{% url 'myadmin:create_classi_tag' %}" class="waves-effect"><i class="material-icons">equalizer</i>创建分类和标签</a></li>
+            <li><div class="divider"></div></li>
+            <li><a href="{% url 'blog:index' %}" class="waves-effect"><i class="material-icons">equalizer</i>回到主页</a></li>
+        </ul>
+        {% block blog_add%}{% endblock %}
+        {% block classification_add%}{% endblock %}
+        {% block bloglist%}{% endblock %}
+        {% block confirm %}{% endblock %}
+        <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+        <script type="text/javascript" src={% static "/blog/js/materialize.min.js" %}></script>
+        <script type="text/javascript">
+            $(".button-collapse").sideNav({
+                menuWidth: 250,
+                closeOnClick: true,
+            });
+        </script>
+        {% block js%}{% endblock %}
+    </body>
+</html>

@@ -1,0 +1,156 @@
+{% extends "myadmin/adminCommon.html" %}
+{% block myadmin_title%}
+  创建博文|winton
+{% endblock %}
+
+{% load static %}
+{% block css%}
+    <link rel="stylesheet" href={% static "/myadmin/css/editor_style.css" %}/>
+    <link rel="stylesheet" href={% static "/myadmin/css/editormd.min.css" %}/>
+    <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
+    <style type="text/css">
+        #classifications_container {
+            height: 190px;
+            overflow: auto;
+        }
+
+        #tags_container {
+            height: 185px;
+            overflow: auto;
+        }
+    </style>
+{% endblock %}
+        
+{% block blog_add %}
+    <div class="row">
+            <div class="col s10 offset-s1">
+                    <br />
+                    <br />
+                    <h5 class="left-align">创建新的博文</h5>
+                    <div class="divider"></div>
+            </div>
+
+            <form action="{% url 'myadmin:save_blog'%}" method="POST" id="new_blog">
+                {% csrf_token%}
+                <div class="row">
+                    <div class="input-field col s3 offset-s1">
+                        <input id="blog_title" type="text" class="validate" name="blog_title">
+                        <label for="blog_title">博客标题</label>
+                    </div>
+
+                    <div class="col s1">
+                        <input id="editor_submit" type="submit" name="submit" value="保存全文" class="red lighten-1 btn-large waves-effect waves-light">
+                    </div>
+
+                    <div class="input-field col s2 offset-s1" >
+                        <h6 class="left-align">博客类别</h6>
+                        <div id="classifications_container" >
+                        {% block classifications %}
+                            {% if classifications %}
+                                {% for classification in classifications %}
+                                    <p>
+                                      <input class="with-gap" name="group1" type="radio" id="{{ classification.id}}" value="{{classification.id}}" />
+                                      <label for="{{ classification.id}}">{{ classification.title}}</label>
+                                    </p>
+                                {% endfor %}
+                            {% endif %}
+                        {% endblock %}
+                        </div>
+                    </div>
+
+                    <div class="input-field col s2">
+                        <h6 class="left-align">博客标签</h6>
+                        <div id="tags_container" >
+                        {% block tags %}
+                            {% if tags %}
+                                {% for tag in tags %}
+                                    <p>
+                                      <input type="checkbox" id="{{tag}}" value="{{tag.id}}" name="tags" />
+                                      <label for="{{tag}}">{{tag.title}}</label>
+                                    </p>
+                                {% endfor %}
+                            {% endif %}
+                        {% endblock %}
+                        </div>
+                    </div>
+
+                    <textarea style="display:none" name="newBlog_content" id="newBlog_content" placeholder=""></textarea>
+                    <input style="display:none" id="tags_id" type="text" name="tags_id">
+                </div>
+            </form>
+    </div>
+
+    <div class="row">
+        <div class="col s10 offset-s1">
+            <div id="layout">
+                <div id="editormd">
+                </div>
+            </div> 
+        </div>
+    </div>
+{% endblock%}
+
+{% block js %}
+    <script type="text/javascript" src={% static "/myadmin/editormd.min.js" %}></script>
+    <script type="text/javascript">
+        var testEditor;
+
+        $(function() {
+            testEditor = editormd("editormd", {
+                width   : "95%",
+                height  : 640,
+                syncScrolling : "single",
+                path    : '{% static "/myadmin/lib/" %}',
+                saveHTMLToTextarea : true
+            });
+        });
+
+        $(document).ready(function() {
+            $("#new_blog").submit(function(event) {
+                if ($('#blog_title').val().length == 0){
+                    alert('请输入博客标题');
+                    return false;
+                }
+
+                if ($("input[type='radio']:checked").length == 0) {
+                    alert('请选择博客分类');
+                    return false;
+                }
+
+                if ($('input[type="checkbox"]:checked').length == 0) {
+                    alert('请选择博客标签');
+                    return false;
+                }
+
+                var tags_id=new Array();  
+                $('input[type="checkbox"]:checked').each(function(){  
+                    tags_id.push($(this).val()); 
+                });  
+                var idstr=tags_id.join('#'); 
+                $('#tags_id').val(idstr);
+
+                var content = testEditor.getHTML();
+                $('#newBlog_content').val(content);
+
+                if ($('#newBlog_content').val().length == 0){
+                    alert('博客内容为空');
+                    return false;
+                }
+
+
+                
+
+                $.ajax({
+                    type: "POST",
+                    data: $("#new_blog").serialize(),
+                    url: "{% url 'myadmin:save_blog' %}",
+                    cache: false,
+                    dataType: "html",
+                });
+
+            });
+
+            
+        });
+    </script>
+{% endblock %}

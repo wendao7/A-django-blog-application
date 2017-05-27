@@ -1,0 +1,68 @@
+{% extends "myadmin/adminCommon.html" %}
+{% block myadmin_title%}
+  博客列表 | winton
+{% endblock %}
+
+{% block bloglist %}
+<div class="row">
+	<div class="col s10 offset-s1">
+	<h4>博客列表</h4>
+	<div class="divider"></div>
+	<table class="bordered striped highlight centered">
+        <thead>
+          <tr>
+              <th>ID</th>
+              <th>标题</th>
+              <th>分类</th>
+              <th>浏览量</th>
+              <th>创建时间</th>
+              <th>发布状态</th>
+              <th>操作</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        {% for blog in blogs%}
+          <tr>
+            <td>{{ blog.id}}</td>
+            <td>{{blog.title}}</td>
+            <td>{{blog.classifications}}</td>
+            <td>{{blog.views}}</td>
+            <td>{{blog.pub_date}}</td>
+            <td>{{blog.publish}}</td>
+            <td>
+            	<a class="waves-effect waves-light btn blue lighten-s2">编辑</a>
+            	<a href="#modal1" class="waves-effect waves-light btn red lighten-s2">删除</a>
+              <a href="{% url 'myadmin:delete_blog' blog.id 'p'%}" class="waves-effect waves-light btn orange lighten-s2">发布</a>
+            </td>
+          </tr>
+          <div id="modal1" class="modal">
+            <div class="card blue-grey darken-1">
+              <div class="card-content white-text">
+                <span class="card-title">生存or毁灭</span>
+                <h5 class="center-align">你他妈真的要删除</h5>
+                <h4 class="center-align"><a class="waves-effect waves-light btn-large red lighten-2">{{blog.title}}</a></h4>
+                <h5 class="center-align">这篇天杀的博客?</h5>
+                
+              </div>
+              <div class="card-action">
+                <a href="{% url 'myadmin:delete_blog' blog.id 'd'%}">心意已决</a>
+                <a href="{% url 'myadmin:bloglist' %}" class="white-text">回头是岸</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        </tbody>
+      </table>
+	</div>
+</div>
+{% endblock %}
+
+{% block js%}
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.modal').modal();
+    });
+  </script>
+{% endblock %}
+

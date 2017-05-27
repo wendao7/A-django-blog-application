@@ -1,0 +1,85 @@
+{% extends "blog/common.html" %}
+
+{% block page-title%}
+  摘要 | winton
+{% endblock %}
+
+{% block abstract %}
+<div class="row">
+  <div class="col s12 m10 offset-m1">
+        {% for blog in blogs %}
+        {% if blog.publish %}
+            <div class="card blue-grey darken-1">
+              <div class="card-content white-text">
+                <a href="{% url 'blog:detail' blog.id %}"<span class="card-title">{{ blog.title }}</span></a>
+                <p>{{ blog.content|striptags|truncatechars:100 }}</p>
+              </div>
+              <div class="card-action">
+                <p class="chip pink lighten-3">{{ blog.classifications}}</p>
+                {% for tag in blog.tags.all %}
+                    <p class="chip pink lighten-4">{{ tag.title }}</p>
+                {% endfor %}
+                <p class="chip right red lighten-3">{{ blog.pub_date|date:"Y-m-d H:i:s" }}</p>
+                <p class="chip right pink lighten-5">{{ blog.views}}</p>
+              </div>
+            </div>
+        {% endif %}
+        {% endfor %}
+
+        <br />
+        <br />
+        <div class="center-align">
+            <span class="blog_footer_tip">
+                当前第{{blogs.number}}页,共{{pages.num_pages}}页
+            </span>
+            
+            <ul class="pagination">
+                {# 上一页，这里需要用到has_previous方法判断是否有上一页 #}
+                <li class="waves-effect
+                        {% if not blogs.has_previous %}
+                            {{disable}}
+                        {% endif %}
+                    ">
+                    <a href="?page=
+                        {% if blogs.has_previous %}
+                            {{blogs.previous_page_number}}
+                        {% else %}
+                            {{blogs.number}}
+                        {% endif %}
+                    ">
+                    <i class="material-icons">chevron_left</i>
+                    </a>
+                </li>
+         
+                {# 遍历所有页码 #}
+                {% for page in pages.page_range %}
+                    <li class="waves-effect"><a href="?page={{page}}">{{page}}</a></li>
+                {% endfor %}
+         
+                {# 下一页，这里需要用到has_next方法判断是否有下一页 #}
+                <li class="waves-effect
+                    {% if not blogs.has_next %}
+                      {{disable}}
+                    {% endif %}
+                ">
+                    <a href="?page=
+                        {% if blogs.has_next %}
+                            {{blogs.next_page_number}}
+                        {% else %}
+                            {{blogs.number}}
+                        {% endif %}
+                    ">
+                    <i class="material-icons">chevron_right</i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js%}
+  <script type="text/javascript">
+        $(".pagination li:eq({{blogs.number}})").addClass("active");
+  </script>
+{% endblock %}

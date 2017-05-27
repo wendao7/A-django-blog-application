@@ -1,0 +1,164 @@
+{% extends "blog/common.html" %}
+{% load static %}
+
+{% block page-title%}
+  {{ blog.title }} | winton
+{% endblock %}
+
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href={% static "/blog/Semantic/semantic.min.css" %} />
+{% endblock %}
+
+{% block detail %}
+    <div class="row">
+      <div class="col s10 offset-s1">
+            <h1>{{ blog.title }}</h1>
+            <p class="chip pink lighten-3">{{ blog.classifications}}</p>
+            {% for tag in tags %}
+            <p class="chip pink lighten-4">{{ tag }}</p>
+            {% endfor %}
+            <p class="btn right red lighten-3">{{ blog.pub_date|date:"Y-m-d H:i:s" }}</p>
+            <div class="divider"></div>
+            <p>{{ blog.content | safe}}</p>
+            <p>玩阴阳师的肝帝们都知道，每天早上5点和下午6点会刷新两次封印任务，每次做任务时最蛋疼的就是找各种怪物对应的副本以及神秘线索。 阴阳师提供了 网易精灵 可以进行一些数据查询，但体验实在太感人，所以大多数人选择使用搜素引擎搜索怪物分布及神秘线索。
+        而每次使用搜索引擎查找又十分不方便，所以笔者决定写一个查询阴阳师妖怪分布的小程序，力求做到使用快捷体验更快捷，把更多的时间留给狗粮和御魂。
+        </p>
+      </div>
+    </div>
+{% endblock %}
+
+{% block comment %}
+<div class="row">
+    <div class="col s10 offset-s1"> 
+        <div class="ui comments">
+            <h3 class="ui dividing header">评论</h3>
+
+            {% if comments %}
+                {% for comment in comments %}
+                    <div class="comment">
+                        <a class="avatar"><img src={% static "/blog/images/avatar.png" %}></a>
+                        <div class="content">
+                            <a class="author" ca_id="{{comment.author.id}}" author="{{comment.author}}">{{comment.author}}-{{comment.author.id}}</a>
+                            <div class="metadata">
+                                <span class="date">{{comment.comment_time|date:"Y-m-d H:i:s"}}</span>
+                            </div>
+                            <div class="text">{{ comment.content}}</div>
+                            <div class="actions">
+                                <a class="reply" comment_id="{{ comment.id }}">回复</a>
+                            </div>
+                        </div>
+
+                        {% for commentreply in comment.comment_replies.all %}
+                        <div class="comments">
+                          <div class="comment">
+                            <a class="avatar">
+                              <img src={% static "/blog/images/avatar.png" %}>
+                            </a>
+                            <div class="content">
+                              <a class="author" ca_id="{{ commentreply.author.id}}" author="{{ commentreply.author}}">{{ commentreply.author}}-{{commentreply.author.id }}@{{ commentreply.to}}-{{commentreply.to.id}}</a>
+                              <div class="metadata">
+                                <span class="date">{{ commentreply.reply_time|date:"Y-m-d H:i:s"}}</span>
+                              </div>
+                              <div class="text">{{ commentreply.content }}</div>
+                              <div class="actions">
+                                <a class="reply" comment_id="{{ comment.id }}">回复</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form id="comment_form" class="ui form" action="{% url 'blog:comment' blog.id %}" method="POST">
+                {% csrf_token%}
+                <textarea name="comment_content" id="comment_content"></textarea>
+                <input id="comment_submit" type="submit" name="submit" value="评论" class="ui blue icon button">
+            </form>
+
+            <form style="display:none" id="commentReply_form" class="ui form" action="{% url 'blog:commentReply' blog.id %}" method="POST">
+                {% csrf_token%}
+                <textarea name="commentReply_content" id="commentReply_content" placeholder=""></textarea>
+                <input style="display:none" type="text" name="comment_id" id="comment_id" >
+                <input style="display:none" type="text" name="toAuthor_id" id="toAuthor_id">
+                <input type="submit" name="submit" value="回复" class="ui blue icon button">
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+    <script src={% static "/blog/semantic/semantic.min.js" %}></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.reply').click(function(event) {
+                $('#comment_form').hide();
+                $('#commentReply_form').css("display",'block');
+                $('#commentReply_content').focus();
+
+                var toAuthor_id = $(this).parent().siblings('.author').attr("ca_id");
+                var toAuthor = $(this).parent().siblings('.author').attr("author");
+                var comment_id = $(this).attr("comment_id");
+                $('#commentReply_content').attr("placeholder",'@'+toAuthor+'-'+toAuthor_id);
+                $('#toAuthor_id').attr("value",toAuthor_id);
+                $('#comment_id').attr("value", comment_id);
+                
+                
+            });
+
+            $('#comment_form').submit(function(event) {
+                if ($('#comment_content').val().length == 0){
+                    alert('请输入评论内容');
+                    return false;
+                }
+                $.ajax({
+                    type: "POST",
+                    data: $("#comment_form").serialize(),
+                    url: "{% url 'blog:comment' blog.id %}",
+                    cache: false,
+                    dataType: "html",
+                });
+
+            });
+
+            $('#commentReply_form').submit(function(event) {
+                if ($('#commentReply_content').val().length == 0){
+                    alert('请输入评论内容');
+                    return false;
+                }
+                $.ajax({
+                    type: "POST",
+                    data: $("#commentReply_form").serialize(),
+                    url: "{% url 'blog:commentReply' blog.id %}",
+                    cache: false,
+                    dataType: "html",
+                });
+
+            });
+        });
+    </script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
