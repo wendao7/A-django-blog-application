@@ -73,9 +73,6 @@
                     url: "{% url 'myadmin:save_classi' %}",
                     cache: false,
                     dataType: "html",
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert("保存出错!" + errorThrown);
-                    }
                 });
 		 	}
 		 });
@@ -98,9 +95,6 @@
                     url: "{% url 'myadmin:save_tag' %}",
                     cache: false,
                     dataType: "html",
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert("保存出错!" + errorThrown);
-                    }
                 });
 		 	}
 		 });
