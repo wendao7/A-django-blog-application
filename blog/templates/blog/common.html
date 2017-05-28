@@ -8,6 +8,7 @@
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href={% static "/blog/css/materialize.min.css" %}  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href={% static "/blog/css/style.css" %}  media="screen,projection"/>
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     {% block css %}
@@ -15,22 +16,41 @@
   </head>
 
   <body>
-    <div class="row">
-      <div class="col s12 m12">
-        <div class="card z-depth-4">
-          <div class="card-image">
-            <img src={% static "/blog/images/mountain.jpg" %}>
-            <span class="card-title white-text text-darken-3"></span>
+    <nav class="white" role="navigation">
+      <div class="nav-wrapper container">
+        <a id="logo-container" href="#" class="brand-logo">雨下青山</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'blog:index'%}" class="blue-grey-text text-darken-3 hoverable">主页</a></li>
+          <li><a href="{% url 'blog:abstract' %}" class="blue-grey-text text-darken-3 hoverable">博客</a></li>
+          <li><a href="{% url 'blog:trick' %}" class="blue-grey-text text-darken-3 hoverable">瓦尔登湖</a></li>
+          <li><a href="{% url 'blog:about' %}" class="blue-grey-text text-darken-3 hoverable">关于</a></li>
+        </ul>
+
+        <ul id="nav-mobile" class="side-nav">
+          <li class="blck-text"><a href="{% url 'blog:index' %}">home</a></li>
+        </ul>
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+      </div>
+    </nav>
+
+    <div id="index-banner" class="parallax-container">
+      <div class="section no-pad-bot">
+        <div class="container">
+          <br><br>
+          <h1 class="header center teal-text text-lighten-2">把酒问月</h1>
+          <div class="row center">
+            <h5 class="header col s12 light">青天有月来几时，我今停杯一问之：
+人攀明月不可得，月行却与人相随？</h5>
           </div>
-          <div class="card-action red lighten-4">
-            <a href="#" class="blue-grey-text text-darken-3">瓦尔登湖</a>
-            <a href="{% url 'blog:about' %}" class="right blue-grey-text text-darken-3 hoverable">关于WINTON</a>
-            <a href="{% url 'blog:trick' %}" class="right blue-grey-text text-darken-3 hoverable">诗</a>
-            <a href="{% url 'blog:abstract' %}" class="right blue-grey-text text-darken-3 hoverable">博客</a>
-            <a href="{% url 'blog:index'%}" class="right blue-grey-text text-darken-3 hoverable">主页</a>
+          <div class="row center">
+            <a href="http://materializecss.com/getting-started.html" id="download-button" class="btn-large waves-effect waves-light teal lighten-1">开始理想国</a>
           </div>
+          <br><br>
+
         </div>
       </div>
+
+      <div class="parallax"><img src="{% static '/blog/images/background1.jpg' %}" alt="Unsplashed background img 1"></div>
     </div>
 
     {% block detail %}{% endblock %}
@@ -40,7 +60,7 @@
     {% block trick %}{% endblock %}
     {% block about %}{% endblock %}
 
-    <footer class="page-footer red lighten-3">
+    <footer class="page-footer teal lighten-2">
       <div class="container">
         <div class="row">
           <div class="col l6 s12">
@@ -72,6 +92,7 @@
     <!--Import jQuery before materialize.js-->
     <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript" src={% static "/blog/js/materialize.min.js" %}></script>
+    <script type="text/javascript" src={% static "/blog/js/init.js" %}></script>
 
     {% block js %}
     {% endblock %}
