@@ -4,12 +4,9 @@
     {% load static %}
     <title>{%block page-title%}{% endblock %}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!--Import Google Icon Font-->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href={% static "/blog/css/materialize.min.css" %}  media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href={% static "/blog/css/style.css" %}  media="screen,projection"/>
-    <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     {% block css %}
     {% endblock %}
@@ -39,8 +36,9 @@
           <br><br>
           <h1 class="header center teal-text text-lighten-2">把酒问月</h1>
           <div class="row center">
-            <h5 class="header col s12 light">青天有月来几时，我今停杯一问之：
-人攀明月不可得，月行却与人相随？</h5>
+            <h5 class="header col s12 light">
+            青天有月来几时，我今停杯一问之：
+            人攀明月不可得，月行却与人相随？</h5>
           </div>
           <div class="row center">
             <a href="http://materializecss.com/getting-started.html" id="download-button" class="btn-large waves-effect waves-light teal lighten-1">开始理想国</a>
@@ -52,6 +50,8 @@
 
       <div class="parallax"><img src="{% static '/blog/images/background1.jpg' %}" alt="Unsplashed background img 1"></div>
     </div>
+    <br />
+    <br />
 
     {% block detail %}{% endblock %}
     {% block comment %}{% endblock %}
