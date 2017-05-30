@@ -22,8 +22,9 @@
         <div class="chips chip-classi"></div>
         <form action="{% url 'myadmin:save_classi' %}" method="POST" id="new_classi">
         	{% csrf_token%}
-        	<input type="submit" name="submit" value="提交" class="waves-effect waves-light btn right-align red lighten-1" id="csubmit">
-        	<input style="display:none" type="text" name="newClassis" id="newClassis">
+            {{ cForm }}
+            <a class="left-align btn red lighten-2" id="createc">生成分类</a>
+        	<input type="submit" name="submit" value="提交" class="waves-effect waves-light btn right-align red lighten-1">
         </form>
     </div>
 
@@ -45,8 +46,9 @@
         <div class="chips chip-tag"></div>
         <form action="{% url 'myadmin:save_tag' %}" method="POST" id="new_tag">
         	{% csrf_token%}
+            {{ tForm }}
+            <a class="left-align btn red lighten-2" id="createt">生成标签</a>
         	<input type="submit" name="submit" value="提交" class="waves-effect waves-light btn right-align red lighten-1" id="tsubmit">
-        	<input style="display:none" type="text" name="newTags" id="newTags">
         </form>
     </div>
 </div>
@@ -55,28 +57,35 @@
 {% block js %}
 	<script type="text/javascript">
 		 $('.chips').material_chip();
-		 $('#new_classi').submit(function(event) {
-		 	/* Act on the event */
-		 	var data =  $('.chip-classi').material_chip('data');
-		 	if (data.length == 0){
-		 		alert("标签为空");
-		 		return false;
-		 	}else{
-		 		var value = new Array();
-		 		for (var i = 0; i < data.length; i++) {
-		 			value.push(data[i]['tag']);
-		 		}
-		 		$("#newClassis").val(value.join(","));
-		 		$.ajax({
-                    type: "POST",
-                    data: $("#new_classi").serialize(),
-                    url: "{% url 'myadmin:save_classi' %}",
-                    cache: false,
-                    dataType: "html",
-                });
-		 	}
-		 });
+         $('#createc').click(function(event) {
+            var data =  $('.chip-classi').material_chip('data');
+            if (data.length == 0){
+                alert("分类为空");
+                return false;
+            }else{
+                var value = new Array();
+                for (var i = 0; i < data.length; i++) {
+                    value.push(data[i]['tag']);
+                }
+                $("#id_ctitle").val(value.join(","));
+            }
+         });
 
+         $('#createt').click(function(event) {
+            var data =  $('.chip-tag').material_chip('data');
+            if (data.length == 0){
+                alert("标签为空");
+                return false;
+            }else{
+                var value = new Array();
+                for (var i = 0; i < data.length; i++) {
+                    value.push(data[i]['tag']);
+                }
+                $("#id_ttitle").val(value.join(","));
+            }
+         });
+
+         {% comment %}
 		 $('#new_tag').submit(function(event) {
 		 	/* Act on the event */
 		 	var data =  $('.chip-tag').material_chip('data');
@@ -98,5 +107,6 @@
                 });
 		 	}
 		 });
+         {% endcomment %}
 	</script>
 {% endblock %}
