@@ -67,9 +67,10 @@ def comment(request,blog_id):
 		form = CommentForm(request.POST)
 		if form.is_valid():
 			content = form.cleaned_data['content']
+			name = form.cleaned_data['cname']
 	        comment = Comment()
 	        belong = get_object_or_404(Blog,pk=blog_id)
-	        author = Guest()
+	        author = Guest(nick=name)
 	        author.save()
 
 	        comment.content = content

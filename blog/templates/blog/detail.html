@@ -36,7 +36,7 @@
                     <div class="comment">
                         <a class="avatar"><img src={% static "/blog/images/avatar.png" %}></a>
                         <div class="content">
-                            <a class="author" ca_id="{{comment.author.id}}" author="{{comment.author}}">{{comment.author}}-{{comment.author.id}}</a>
+                            <a class="author" ca_id="{{comment.author.id}}" author="{{comment.author}}">{{comment.author}}</a>
                             <div class="metadata">
                                 <span class="date">{{comment.comment_time|date:"Y-m-d H:i:s"}}</span>
                             </div>
@@ -53,7 +53,7 @@
                               <img src={% static "/blog/images/avatar.png" %}>
                             </a>
                             <div class="content">
-                              <a class="author" ca_id="{{ commentreply.author.id}}" author="{{ commentreply.author}}">{{ commentreply.author}}-{{commentreply.author.id }}@{{ commentreply.to}}-{{commentreply.to.id}}</a>
+                              <a class="author" ca_id="{{ commentreply.author.id}}" author="{{ commentreply.author}}">{{ commentreply.author}}@{{ commentreply.to}}</a>
                               <div class="metadata">
                                 <span class="date">{{ commentreply.reply_time|date:"Y-m-d H:i:s"}}</span>
                               </div>
@@ -70,6 +70,7 @@
             {% endif %}
 
             <form id="comment_form" class="ui form" action="{% url 'blog:comment' blog.id %}" method="POST">
+                <br />
                 {% csrf_token%}
                 {{ commentSub}}
                 <input type="submit" name="submit" value="评论" class="ui blue icon button">
@@ -105,7 +106,7 @@
                 
                 $('#id_cid').attr("value",comment_id);
                 $('#id_toid').attr("value", toAuthor_id);
-                $('#id_contentc').attr("placeholder",'@'+toAuthor+'-'+toAuthor_id);
+                $('#id_contentc').attr("placeholder",'@'+toAuthor);
                 
             });
         });
