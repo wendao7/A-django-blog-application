@@ -29,8 +29,8 @@
         
 {% block blog_add %}
     <div class="row">
-            <div class="col s12">
-                <h3 id="createMessage"></h3>  
+            <div class="col s4 offset-s4 red lighten-2 waves-effect waves-light">
+                <h5 id="blogMessage" class="white-text"></h5>  
             </div>
             <div class="col s10 offset-s1">
                     <br />
@@ -123,23 +123,23 @@
 
             $("#createblog").click(function(event) {
                 if ($('#blog_title').val().length == 0){
-                    alert('请输入博客标题');
+                    $("#blogMessage").text("请输入博客标题");
                     return false;
                 }
 
                 if ($("input[type='radio']:checked").length == 0) {
-                    alert('请选择博客分类');
+                    $("#blogMessage").text("请选择博客分类");
                     return false;
                 }
 
                 if ($('input[type="checkbox"]:checked').length == 0) {
-                    alert('请选择博客标签');
+                    $("#blogMessage").text("请选择博客标签");
                     return false;
                 }
 
                 var content = testEditor.getHTML();
                 if (content.length == 0) {
-                    alert("博客内容为空");
+                    $("#blogMessage").text("博客内容不能为空");
                     return false;
                 }
 
@@ -159,7 +159,7 @@
                 var content = testEditor.getHTML();
                 $('#id_bcontent').val(content);
 
-                alert("Success! 模板生成");
+                $("#blogMessage").text("模板生成成功");
 
             });            
         });

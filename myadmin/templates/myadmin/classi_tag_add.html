@@ -5,9 +5,10 @@
 
 {% block classification_add%}
 <div class="row">
+    <div class="col s4 offset-s4 red lighten-2 waves-effect waves-light">
+        <h5 id="ctMessage" class="white-text center"></h5>  
+    </div>
 	<div class="col s5 offset-s1">
-        <br />
-        <br />
         <h5 class="left-align">已有分类</h5>
         <div class="divider"></div>
         <br />
@@ -29,8 +30,6 @@
     </div>
 
     <div class="col s5">
-        <br />
-        <br />
         <h5 class="left-align">已有标签</h5>
         <div class="divider"></div>
         <br />
@@ -60,7 +59,7 @@
          $('#createc').click(function(event) {
             var data =  $('.chip-classi').material_chip('data');
             if (data.length == 0){
-                alert("分类为空");
+                $("#ctMessage").text("分类为空");
                 return false;
             }else{
                 var value = new Array();
@@ -74,7 +73,7 @@
          $('#createt').click(function(event) {
             var data =  $('.chip-tag').material_chip('data');
             if (data.length == 0){
-                alert("标签为空");
+                $("#ctMessage").text("标签为空");
                 return false;
             }else{
                 var value = new Array();
