@@ -71,15 +71,13 @@
 
             <form id="comment_form" class="ui form" action="{% url 'blog:comment' blog.id %}" method="POST">
                 {% csrf_token%}
-                <textarea name="comment_content" id="comment_content"></textarea>
-                <input id="comment_submit" type="submit" name="submit" value="评论" class="ui blue icon button">
+                {{ commentSub}}
+                <input type="submit" name="submit" value="评论" class="ui blue icon button">
             </form>
 
             <form style="display:none" id="commentReply_form" class="ui form" action="{% url 'blog:commentReply' blog.id %}" method="POST">
                 {% csrf_token%}
-                <textarea name="commentReply_content" id="commentReply_content" placeholder=""></textarea>
-                <input style="display:none" type="text" name="comment_id" id="comment_id" >
-                <input style="display:none" type="text" name="toAuthor_id" id="toAuthor_id">
+                {{ commentReplySub.as_p}}
                 <input type="submit" name="submit" value="回复" class="ui blue icon button">
             </form>
 
@@ -97,44 +95,18 @@
                 $('#commentReply_form').css("display",'block');
                 $('#commentReply_content').focus();
 
+                $("label[for='id_cid']").hide()
+                $("label[for='id_toid']").hide()
+
                 var toAuthor_id = $(this).parent().siblings('.author').attr("ca_id");
                 var toAuthor = $(this).parent().siblings('.author').attr("author");
                 var comment_id = $(this).attr("comment_id");
-                $('#commentReply_content').attr("placeholder",'@'+toAuthor+'-'+toAuthor_id);
-                $('#toAuthor_id').attr("value",toAuthor_id);
-                $('#comment_id').attr("value", comment_id);
+
                 
+                $('#id_cid').attr("value",comment_id);
+                $('#id_toid').attr("value", toAuthor_id);
+                $('#id_contentc').attr("placeholder",'@'+toAuthor+'-'+toAuthor_id);
                 
-            });
-
-            $('#comment_form').submit(function(event) {
-                if ($('#comment_content').val().length == 0){
-                    alert('请输入评论内容');
-                    return false;
-                }
-                $.ajax({
-                    type: "POST",
-                    data: $("#comment_form").serialize(),
-                    url: "{% url 'blog:comment' blog.id %}",
-                    cache: false,
-                    dataType: "html",
-                });
-
-            });
-
-            $('#commentReply_form').submit(function(event) {
-                if ($('#commentReply_content').val().length == 0){
-                    alert('请输入评论内容');
-                    return false;
-                }
-                $.ajax({
-                    type: "POST",
-                    data: $("#commentReply_form").serialize(),
-                    url: "{% url 'blog:commentReply' blog.id %}",
-                    cache: false,
-                    dataType: "html",
-                });
-
             });
         });
     </script>

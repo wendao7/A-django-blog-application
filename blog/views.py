@@ -8,6 +8,8 @@ from django.core.urlresolvers import reverse
 
 from .models import Blog,Tag,Comment,Guest,CommentReply
 
+from .forms import CommentForm, CommentReplyForm
+
 def index(request):
 	latest_blog_list = Blog.objects.order_by('-pub_date')[:5]
 	hotest_blog_list = Blog.objects.order_by('-views')[:5]
@@ -32,10 +34,15 @@ def detail(request,blog_id):
 	#comments = get_list_or_404(Comment, belong=blog_id)
 	comments = blog.blog_comments.all()
 
+	commentSub = CommentForm()
+	commentReplySub = CommentReplyForm()
+
 	context = {
 		'blog':blog,
 		'tags':tags,
 		'comments':comments,
+		'commentSub':commentSub,
+		'commentReplySub':commentReplySub,
 	}
 	return render(request, 'blog/detail.html', context)
 
@@ -55,53 +62,48 @@ def abstract(request):
 	}
 	return render(request, 'blog/abstract.html', context)
 
-
-# Create your views here.
-
 def comment(request,blog_id):
-    if request.POST:
-        content = request.POST['comment_content']
+	if request.method == 'POST':
+		form = CommentForm(request.POST)
+		if form.is_valid():
+			content = form.cleaned_data['content']
+	        comment = Comment()
+	        belong = get_object_or_404(Blog,pk=blog_id)
+	        author = Guest()
+	        author.save()
 
-        comment = Comment()
-        belong = get_object_or_404(Blog,pk=blog_id)
-        author = Guest()
-        author.save()
+	        comment.content = content
+	        comment.author = author
+	        comment.belong = belong
 
-        comment.content = content
-        comment.author = author
-        comment.belong = belong
-
-        comment.save()
-
-        bid = blog_id
-
-    return redirect(reverse('blog:detail', args=(bid,)))
-
+	        comment.save()
+	        bid = blog_id
+    	return redirect(reverse('blog:detail', args=(bid,)))
 
 def commentReply(request, blog_id):
-    if request.POST:
-        content = request.POST['commentReply_content']
-        cid = request.POST['comment_id']
-        to_id = request.POST['toAuthor_id']
+	if request.method == 'POST':
+		form = CommentReplyForm(request.POST)
+		if form.is_valid():
+			contentc = form.cleaned_data['contentc']
+			cid = form.cleaned_data['cid']
+			toid = form.cleaned_data['toid']
 
-        commentRe = CommentReply()
-        commentRe.content = content
-        comment = get_object_or_404(Comment,pk=cid)
-        commentRe.comment = comment
-        
-        author = Guest()
-        author.save()
+			print cid
+	        comment = get_object_or_404(Comment,pk=cid)
+	        author = Guest()
+	        author.save()
+	        toAuthor = get_object_or_404(Guest,pk=toid)
 
-        commentRe.author = author 
-        toAuthor = get_object_or_404(Guest,pk=to_id)
+	        commentRe = CommentReply()
+	        commentRe.content = contentc
+	        commentRe.comment = comment
+	        commentRe.author = author 
+	        commentRe.to = toAuthor
 
-        commentRe.to = toAuthor
+	        commentRe.save()
 
-        commentRe.save()
-
-        bid = blog_id
-
-    return redirect(reverse('blog:detail', args=(bid,)))
+	        bid = blog_id
+		return redirect(reverse('blog:detail', args=(bid,)))
 
 
 
