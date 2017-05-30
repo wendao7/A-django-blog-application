@@ -4,38 +4,41 @@ from __future__ import unicode_literals
 from django.shortcuts import render,get_object_or_404,redirect,reverse, HttpResponse
 from blog.models import Classification,Tag,Blog
 
-from .forms import ClassificationsForm, TagsForm
+from .forms import ClassificationsForm, TagsForm, BlogForm
 
 # Create your views here.
 def create_blog(request):
 	classifications = Classification.objects.all()
 	tags = Tag.objects.all()
+	bform = BlogForm()
 	context = {
 		'classifications': classifications,
 		'tags': tags,
+		'bform': bform,
 	}
 	return render(request, 'myadmin/blog_add.html', context)
 
 def save_blog(request):
-	if request.POST:
-		title = request.POST['blog_title']
-		cla_id = request.POST['group1']
-		tags = request.POST['tags_id'].split("#")
-		content = request.POST['newBlog_content']
+	if request.method == 'POST':
+		form = BlogForm(request.POST)
+		if form.is_valid():
+			title = form.cleaned_data['btitle']
+			cla_id = form.cleaned_data['bclassifications']
+			tags = form.cleaned_data['btags'].split('#')
+			content = form.cleaned_data['bcontent']
 
-		blog = Blog()
-		blog.title = title
-		blog.classifications = get_object_or_404(Classification,pk=cla_id)
-		blog.save()
-		blog.content = content
+			blog = Blog()
+			blog.title = title
+			blog.classifications = get_object_or_404(Classification,pk=cla_id)
+			blog.save()
+			blog.content = content
 
-		for tag in tags:
-			tag_ins = get_object_or_404(Tag,pk=tag)
-			blog.tags.add(tag_ins)
+			for tag in tags:
+				tag_ins = get_object_or_404(Tag,pk=tag)
+				blog.tags.add(tag_ins)
 
-		blog.save()
-
-	return redirect(reverse('myadmin:bloglist', args=()))
+			blog.save()
+		return redirect(reverse('myadmin:bloglist', args=()))
 
 def create_classi_tag(request):
 	tags = Tag.objects.all();

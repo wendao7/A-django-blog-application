@@ -18,28 +18,32 @@
             height: 185px;
             overflow: auto;
         }
+
+        #createblog {
+            position: fixed;
+            bottom: 100px;
+            right: 10px;
+        }
     </style>
 {% endblock %}
         
 {% block blog_add %}
     <div class="row">
+            <div class="col s12">
+                <h3 id="createMessage"></h3>  
+            </div>
             <div class="col s10 offset-s1">
-                    <br />
                     <br />
                     <h5 class="left-align">创建新的博文</h5>
                     <div class="divider"></div>
             </div>
 
-            <form action="{% url 'myadmin:save_blog'%}" method="POST" id="new_blog">
+            <form action="#" method="POST" id="new_blog">
                 {% csrf_token%}
                 <div class="row">
                     <div class="input-field col s3 offset-s1">
                         <input id="blog_title" type="text" class="validate" name="blog_title">
                         <label for="blog_title">博客标题</label>
-                    </div>
-
-                    <div class="col s1">
-                        <input id="editor_submit" type="submit" name="submit" value="保存全文" class="red lighten-1 btn-large waves-effect waves-light">
                     </div>
 
                     <div class="input-field col s2 offset-s1" >
@@ -73,9 +77,6 @@
                         {% endblock %}
                         </div>
                     </div>
-
-                    <textarea style="display:none" name="newBlog_content" id="newBlog_content" placeholder=""></textarea>
-                    <input style="display:none" id="tags_id" type="text" name="tags_id">
                 </div>
             </form>
     </div>
@@ -88,6 +89,15 @@
             </div> 
         </div>
     </div>
+    <button class="btn-large  red lighten-2 waves-effect waves-light" id="createblog">生成</button>
+    <form action="{% url 'myadmin:save_blog'%}" method="POST">
+        {% csrf_token %}
+        {{ bform }}
+        <input type="submit" name="submit" value="提交博客" class="red lighten-1 btn-large waves-effect waves-light">
+    </form>
+
+    <br />
+    <br />
 {% endblock%}
 
 {% block js %}
@@ -106,7 +116,12 @@
         });
 
         $(document).ready(function() {
-            $("#new_blog").submit(function(event) {
+            $("label[for='id_btitle']").hide();
+            $("label[for='id_bclassifications']").hide();
+            $("label[for='id_btags']").hide();
+            $("label[for='id_bcontent']").hide();
+
+            $("#createblog").click(function(event) {
                 if ($('#blog_title').val().length == 0){
                     alert('请输入博客标题');
                     return false;
@@ -122,35 +137,31 @@
                     return false;
                 }
 
+                var content = testEditor.getHTML();
+                if (content.length == 0) {
+                    alert("博客内容为空");
+                    return false;
+                }
+
+                var title = $('#blog_title').val();
+                $('#id_btitle').val(title);
+
+                var classification = $("input[type='radio']:checked").val();
+                $('#id_bclassifications').val(classification);
+
                 var tags_id=new Array();  
                 $('input[type="checkbox"]:checked').each(function(){  
                     tags_id.push($(this).val()); 
                 });  
                 var idstr=tags_id.join('#'); 
-                $('#tags_id').val(idstr);
+                $('#id_btags').val(idstr);
 
                 var content = testEditor.getHTML();
-                $('#newBlog_content').val(content);
+                $('#id_bcontent').val(content);
 
-                if ($('#newBlog_content').val().length == 0){
-                    alert('博客内容为空');
-                    return false;
-                }
+                alert("Success! 模板生成");
 
-
-                
-
-                $.ajax({
-                    type: "POST",
-                    data: $("#new_blog").serialize(),
-                    url: "{% url 'myadmin:save_blog' %}",
-                    cache: false,
-                    dataType: "html",
-                });
-
-            });
-
-            
+            });            
         });
     </script>
 {% endblock %}

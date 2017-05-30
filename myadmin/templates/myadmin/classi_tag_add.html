@@ -84,29 +84,5 @@
                 $("#id_ttitle").val(value.join(","));
             }
          });
-
-         {% comment %}
-		 $('#new_tag').submit(function(event) {
-		 	/* Act on the event */
-		 	var data =  $('.chip-tag').material_chip('data');
-		 	if (data.length == 0){
-		 		alert("标签为空");
-		 		return false;
-		 	}else{
-		 		var value = new Array();
-		 		for (var i = 0; i < data.length; i++) {
-		 			value.push(data[i]['tag']);
-		 		}
-		 		$("#newTags").val(value.join(","));
-		 		$.ajax({
-                    type: "POST",
-                    data: $("#new_tag").serialize(),
-                    url: "{% url 'myadmin:save_tag' %}",
-                    cache: false,
-                    dataType: "html",
-                });
-		 	}
-		 });
-         {% endcomment %}
 	</script>
 {% endblock %}
