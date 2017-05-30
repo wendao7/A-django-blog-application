@@ -86,12 +86,13 @@ def commentReply(request, blog_id):
 		form = CommentReplyForm(request.POST)
 		if form.is_valid():
 			contentc = form.cleaned_data['contentc']
+			name = form.cleaned_data['crname']
 			cid = form.cleaned_data['cid']
 			toid = form.cleaned_data['toid']
 
 			print cid
 	        comment = get_object_or_404(Comment,pk=cid)
-	        author = Guest()
+	        author = Guest(nick=name)
 	        author.save()
 	        toAuthor = get_object_or_404(Guest,pk=toid)
 
