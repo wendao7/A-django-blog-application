@@ -1,8 +1,17 @@
 {% extends "blog/common.html" %}
 {% load static %}
+{% load blog_tags %}
 
 {% block page-title%}
   home | winton
+{% endblock %}
+
+{% block css %}
+  <style type="text/css">
+    #bloglists {
+      padding-left: 40px;
+    }
+  </style>
 {% endblock %}
 
 {% block side-nav-list %}
@@ -17,11 +26,11 @@
             <h2 class="center brown-text"><i class="material-icons">flash_on</i></h2>
             <h5 class="center">最近</h5>
             <ul class="collection with-header">
-              {% if latest_blog_list %}
+            {% get_recent_blogs as latest_blog_list %}
                 {% for blog in latest_blog_list %}
                   {% if blog.publish %}
                     <li>
-                      <a href="{% url 'blog:detail' blog.id %}" class="collection-item blue-grey-text text-darken-3">
+                      <a href="{{ blog.get_absolute_url }}" class="collection-item blue-grey-text text-darken-3">
                         <h6>
                         {{ blog.title }}
                         <span class="right"><i class="tiny material-icons">query_builder</i> {{ blog.pub_date|date:"Y-m-d H:i:s" }}</span>
@@ -29,11 +38,12 @@
                       </a>
                     </li>
                     <div class="divider"></div>
+                  {% else %}
+                    <p class="center">博客打磨中...</p> 
                   {% endif %}
+                {% empty %}
+                  <p class="center">winton很懒,毛都没留下一根!</p> 
                 {% endfor %}
-              {% else %}
-                <p class="center">winton很懒,毛都没留下一根!</p> 
-              {% endif %}
             </ul>
           </div>
         </div>
@@ -43,23 +53,24 @@
             <h2 class="center brown-text"><i class="material-icons">group</i></h2>
             <h5 class="center">最热</h5>
             <ul class="collection with-header">
-              {% if hotest_blog_list %}
+              {% get_hotest_blogs as hotest_blog_list %}
                 {% for blog in hotest_blog_list %}
-                {% if blog.publish %}
-                  <li>
-                    <a href="{% url 'blog:detail' blog.id %}" class="collection-item blue-grey-text text-darken-3">
-                      <h6>
-                        {{ blog.title }}
-                        <span class="right"><i class="tiny material-icons">trending_up</i> {{ blog.views }}</span>
-                      </h6>
-                    </a>
-                  </li>
-                  <div class="divider"></div>
-                {% endif %}
+                  {% if blog.publish %}
+                    <li>
+                      <a href="{{ blog.get_absolute_url }}" class="collection-item blue-grey-text text-darken-3">
+                        <h6>
+                          {{ blog.title }}
+                          <span class="right"><i class="tiny material-icons">trending_up</i> {{ blog.views }}</span>
+                        </h6>
+                      </a>
+                    </li>
+                    <div class="divider"></div>
+                  {% else %}
+                    <p class="center">博客打磨中...</p> 
+                  {% endif %}
+                {% empty %}
+                  <p class="center">winton很懒,毛都没留下一根!</p> 
                 {% endfor %}
-              {% else %}
-                <p class="center">winton很懒,毛都没留下一根!</p> 
-              {% endif %}
             </ul>
           </div>
         </div>
@@ -82,35 +93,31 @@
     <div class="parallax"><img src="{% static '/blog/images/background2.jpg' %}" alt="Unsplashed background img 2"></div>
   </div>
 
-  <div class="container">
-    <div class="section">
+  <br>
 
-      <div class="row">
-        <div class="col s11 offset-s1 center">
-          <h3><i class="mdi-content-send brown-text"></i></h3>
-          <h4>文章列表</h4>
-          <div class="collection">
-            {% if blogs %}
+  <div class="row" id="bloglists">
+
+        <div class="col s12 m7">
+          <h5>文章列表</h5>
+          <ul class="collection">
               {% for blog in blogs %}
-              {% if blog.publish %}
-                <a href="{% url 'blog:detail' blog.id %}" class="collection-item">
-                  <h5>
-                  <i class=" left material-icons">voicemail</i>
-                  <span class="left">{{blog.views}}</span>
-                  <i class="material-icons">receipt</i>
-                  <span>{{ blog.title }}</span>
-                  <span class="right">{{ blog.pub_date|date:"Y-m-d H:i:s" }}</span>
-                  <i class="material-icons right">schedule</i>
-                  <span class="right">{{ blog.classifications }}</span>
-                  <i class="material-icons right">label</i>  
-                  </h5>
-                </a>
-              {% endif %}
+                {% if blog.publish %}
+                <li>
+                  <a href="{{ blog.get_absolute_url }}" class="collection-item">
+                  <h6>
+                    {{ blog.title }}
+                    <span class="right"><i class="tiny material-icons">query_builder</i> {{ blog.pub_date|date:"Y-m-d H:i:s" }}</span>
+                  </h6>
+                  </a>
+                </li>
+                <div class="divider"></div>
+                {% else %}
+                  <p class="center">博客打磨中...</p> 
+                {% endif %}
+              {% empty %}
+                <p class="center">winton很懒,毛都没留下一根!</p>
               {% endfor %}
-            {% else %}
-              <p>winton很懒,毛都没留下一根!</p> 
-            {% endif %}
-          </div>
+          </ul>
 
           <div class="center-align">
             <span class="blog_footer_tip">
@@ -159,9 +166,31 @@
             </ul>
           </div>
         </div>
-      </div>
 
-    </div>
+        <div class="col s12 m2">
+          <h6 class="center">归档</h6>
+          <ul class="collection with-header">
+            {% archives as dates %}
+            {% for date in dates%}
+              <li>
+              <a href="{% url 'blog:archives' date.year date.month %}" class="collection-item">{{date.year}}年{{date.month}}月<span class="post-count right">(13)</span></a>
+              </li>
+            {% empty%}
+              <p>暂无博客</p>
+            {% endfor%}
+          </ul>
+        </div>
+
+        <div class="col s12 m3">
+          <h6 class="center with-header">分类</h6>
+            {% get_classifications as classifications %}
+            {% for c in classifications %}
+              <a href="#" class="chip red lighten-3">{{ c.title }}<span class="right teal-text">(12)</span></a>
+            {% empty%}
+              <p>暂无分类</p>
+            {% endfor%}
+        </div>
+
   </div>
 {% endblock %}
 

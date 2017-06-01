@@ -46,15 +46,15 @@
           <div class="row center">
             <a href="#" class="btn-large waves-effect waves-light teal lighten-1">开始理想国</a>
           </div>
-          <br><br>
+          <br>
 
         </div>
       </div>
 
       <div class="parallax"><img src="{% static '/blog/images/background1.jpg' %}" alt="Unsplashed background img 1"></div>
     </div>
-    <br />
-
+    
+    {% block background1 %}{% endblock %}
     {% block detail %}{% endblock %}
     {% block comment %}{% endblock %}
     {% block side-nav-list %}{% endblock %}

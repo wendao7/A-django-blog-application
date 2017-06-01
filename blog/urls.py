@@ -10,4 +10,5 @@ urlpatterns = [
 	url(r'^abstract$', views.abstract, name='abstract'),
 	url(r'^trick$', views.trick, name='trick'),
 	url(r'^about$', views.about, name='about'),
+	url(r'^archives/(?P<year>[0-9]{4})/(?P<month>[0-9]{1,2})/$', views.archives, name='archives'),
 ]

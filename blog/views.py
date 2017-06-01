@@ -10,19 +10,33 @@ from .models import Blog,Tag,Comment,Guest,CommentReply
 
 from .forms import CommentForm, CommentReplyForm
 
+import markdown
+
 def index(request):
-	latest_blog_list = Blog.objects.order_by('-pub_date')[:5]
-	hotest_blog_list = Blog.objects.order_by('-views')[:5]
 	blog_lists = Blog.objects.all()
 	pages, blogs = getPages(request, blog_lists)
 
 	context = {
-		'latest_blog_list': latest_blog_list,
-		'hotest_blog_list': hotest_blog_list,
 		'blogs': blogs,
 		'pages':pages,
 		'disable':'disabled',
 	}
+	return render(request,'blog/index.html', context)
+
+def archives(request, year, month):
+	print year,month
+	blog_list = Blog.objects.filter(pub_date__year = year).filter(pub_date__month = month).order_by('-pub_date')
+
+	print blog_list
+
+	pages, blogs = getPages(request, blog_list)
+
+	context = {
+		'blogs': blogs,
+		'pages':pages,
+		'disable':'disabled',
+	}
+
 	return render(request,'blog/index.html', context)
 
 def detail(request,blog_id):

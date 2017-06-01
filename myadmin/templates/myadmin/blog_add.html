@@ -137,7 +137,7 @@
                     return false;
                 }
 
-                var content = testEditor.getHTML();
+                var content = testEditor.getPreviewedHTML();
                 if (content.length == 0) {
                     $("#blogMessage").text("博客内容不能为空");
                     return false;
@@ -155,8 +155,7 @@
                 });  
                 var idstr=tags_id.join('#'); 
                 $('#id_btags').val(idstr);
-
-                var content = testEditor.getHTML();
+                
                 $('#id_bcontent').val(content);
 
                 $("#blogMessage").text("模板生成成功");

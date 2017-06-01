@@ -8,6 +8,7 @@
 {% load static %}
 {% block css %}
     <link rel="stylesheet" type="text/css" href={% static "/blog/semantic/semantic.min.css" %} />
+    <link rel="stylesheet" type="text/css" href={% static "/myadmin/css/editormd.min.css" %} />
 {% endblock %}
 
 {% block detail %}
@@ -20,7 +21,9 @@
             {% endfor %}
             <p class="btn right red lighten-3">{{ blog.pub_date|date:"Y-m-d H:i:s" }}</p>
             <div class="divider"></div>
-            <p>{{ blog.content | safe}}</p>
+            <div class="markdown-body editormd-html-preview">
+                {{ blog.content|safe}}
+            </div>
       </div>
     </div>
 {% endblock %}
@@ -89,6 +92,7 @@
 
 {% block js %}
     <script src={% static "/blog/semantic/semantic.min.js" %}></script>
+    <script src={% static "/myadmin/marked.min.js" %}></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $('.reply').click(function(event) {

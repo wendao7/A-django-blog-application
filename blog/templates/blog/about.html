@@ -1,4 +1,5 @@
 {% extends "blog/common.html" %}
+{% load blog_tags %}
 
 {% block page-title%}
   关于 | winton
@@ -8,6 +9,21 @@
 	<div class="row">
       <div class="col s10 offset-s1">
         <h3 class="center-align">winton</h3>
+        {% archives as dates %}
+        {% for date in dates%}
+        	<a><p>{{date.year}}年{{date.month}}月<span class="post-count">(13)</span></p></a>
+        {% empty%}
+        	<p>暂无博客</p>
+        {% endfor%}
       </div> 
+
+      <div class="col s10 offset-s1">
+      	{% get_classifications as classifications %}
+      	{% for c in classifications %}
+        	<p>{{ c.title }}</p>
+        {% empty%}
+        	<p>暂无分类</p>
+        {% endfor%}
+      </div>
     </div>
 {% endblock %}
