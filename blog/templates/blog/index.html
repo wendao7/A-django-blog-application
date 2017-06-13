@@ -185,7 +185,7 @@
           <h6 class="center with-header">分类</h6>
             {% get_classifications as classifications %}
             {% for c in classifications %}
-              <a href="#" class="chip red lighten-3">{{ c.title }}<span class="right teal-text">(12)</span></a>
+              <a href="{% url 'blog:category' c.pk%}" class="chip red lighten-3">{{ c.title }}<span class="right teal-text">(12)</span></a>
             {% empty%}
               <p>暂无分类</p>
             {% endfor%}

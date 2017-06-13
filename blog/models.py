@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 from django.db import models
 from django.urls import reverse
 
+from users.models import User
+
 # Create your models here.
 
 class Tag(models.Model):
@@ -46,7 +48,7 @@ class Guest(models.Model):
 
 class Comment(models.Model):
 	content = models.TextField()
-	author = models.ForeignKey(Guest, related_name='user_comments', null=True, blank=True, on_delete=models.SET_NULL)
+	author = models.ForeignKey(User, related_name='user_comments', null=True, blank=True, on_delete=models.SET_NULL)
 	belong = models.ForeignKey(Blog,related_name='blog_comments')
 	comment_time = models.DateTimeField(auto_now_add=True)
 
@@ -56,8 +58,8 @@ class Comment(models.Model):
 class CommentReply(models.Model):
     content = models.TextField()
     comment = models.ForeignKey(Comment, related_name='comment_replies')
-    author = models.ForeignKey(Guest, related_name='user_comment_replies', null=True, blank=True, on_delete=models.SET_NULL)
-    to = models.ForeignKey(Guest, related_name='user_replied', null=True, blank=True, on_delete=models.SET_NULL)
+    author = models.ForeignKey(User, related_name='user_comment_replies', null=True, blank=True, on_delete=models.SET_NULL)
+    to = models.ForeignKey(User, related_name='user_replied', null=True, blank=True, on_delete=models.SET_NULL)
     reply_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
