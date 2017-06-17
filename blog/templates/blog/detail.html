@@ -85,7 +85,7 @@
             <form style="display:none" id="commentReply_form" class="ui form" action="{% url 'blog:commentReply' blog.id %}" method="POST">
                 {% csrf_token%}
                 {{ commentReplySub.as_p}}
-                <a class="ui blue button" id="message" href="{% url 'users:login' %}">{{ message }}</a>
+                <a class="ui blue button" id="message" href="/accounts/login">{{ message }}</a>
                 <input type="submit" name="submit" value="回复" class="ui blue icon button commentsub">
             </form>
 
@@ -112,6 +112,7 @@
 
                 $("label[for='id_cid']").hide()
                 $("label[for='id_toid']").hide()
+                $("#message").hide()
 
                 var toAuthor_id = $(this).parent().siblings('.author').attr("ca_id");
                 var toAuthor = $(this).parent().siblings('.author').attr("author");
