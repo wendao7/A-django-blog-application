@@ -124,6 +124,7 @@ LOGIN_REDIRECT_URL = 'http://www.wendaowin.cn:3000'
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
