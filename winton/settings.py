@@ -120,6 +120,21 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LOGIN_REDIRECT_URL = 'http://www.wendaowin.cn:3000'
 
+#LOGIN_REDIRECT_URL = 'http://localhost:8000'
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+EMAIL_BACKEND =  'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = '1139751740@qq.com'
+EMAIL_HOST_PASSWORD = 'yhwgiqpwxdhgiiai'
+EMAIL_SUBJECT_PREFIX = 'WenDao'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = "1139751740@qq.com"  
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/

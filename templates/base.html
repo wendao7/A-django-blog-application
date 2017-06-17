@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
+    {% load static %}
     <title>{% block head_title %}{% endblock %}</title>
     {% block extra_head %}
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href={% static "/blog/css/materialize.min.css" %}  media="screen,projection"/>
     {% endblock %}
   </head>
   <body>
     {% block body %}
 
     {% if messages %}
-    <div>
+    <div class="row">
+      <div class="col s4 offset-s4 center">
       <strong>Messages:</strong>
-      <ul>
-	{% for message in messages %}
-	<li>{{message}}</li>
-	{% endfor %}
-      </ul>
+        <ul>
+          {% for message in messages %}
+          <li>{{message}}</li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
     {% endif %}
 
@@ -37,6 +43,8 @@
     {% endblock %}
     {% endblock %}
     {% block extra_body %}
+      <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+      <script type="text/javascript" src={% static "/blog/js/materialize.min.js" %}></script>
     {% endblock %}
   </body>
 </html>

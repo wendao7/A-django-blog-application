@@ -25,7 +25,7 @@
             <li><a href="" class="blue-grey-text text-darken-3 hoverable right">{{ user.username }}</a></li>
             <li><a href="{% url 'users:logout' %}" class="blue-grey-text text-darken-3 hoverable right">退出</a></li>
           {% else %}
-            <li><a href="{% url 'users:register' %}" class="blue-grey-text text-darken-3 hoverable right ">注册</a></li>
+            <li><a href="/accounts/signup" class="blue-grey-text text-darken-3 hoverable right ">注册</a></li>
           <li><a href="/accounts/login" class="blue-grey-text text-darken-3 hoverable right">登陆</a></li>
           {% endif %}
         </ul>

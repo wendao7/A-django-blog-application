@@ -23,7 +23,7 @@
         <div class="flex-center">
             <div class="unit-1-2 unit-1-on-mobile">
                 <h4 class="center">注册</h4>
-                <div class="col s6 offset-s4">
+                <div class="col s6 offset-s3">
                 <form class="form" action="{% url 'users:register' %}" method="post">
                     {% csrf_token %}
                     {% for field in form %}
@@ -34,12 +34,10 @@
                             <p class="help text-small text-muted">{{ field.help_text|safe }}</p>
                         {% endif %}
                     {% endfor %}
-                    <button type="submit" class="btn btn-primary btn-block red lighten-1">注册</button>
+                    <button type="submit" class="btn btn-primary red lighten-1">注册</button>
+                    <a class="btn red lighten-2" href="/accounts/login">已有账号</a>
                 </form>
                 <br/>
-                <div class="flex-center top-gap text-small">
-                    <a class="btn red lighten-2" href="{% url 'users:login' %}">已有账号登录</a>
-                </div>
                 </div>
             </div>
         </div>
