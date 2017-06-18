@@ -31,7 +31,7 @@
             <td>{{blog.pub_date}}</td>
             <td>{{blog.publish}}</td>
             <td>
-            	<a class="waves-effect waves-light btn blue lighten-s2">编辑</a>
+            	<a href="{% url 'myadmin:change' blog.id %}" class="waves-effect waves-light btn blue lighten-s2">编辑</a>
             	<a href="#modal{{blog.id}}" class="waves-effect waves-light btn red lighten-s2">删除</a>
               <a href="{% url 'myadmin:delete_blog' blog.id 'p'%}" class="waves-effect waves-light btn orange lighten-s2">发布</a>
             </td>

@@ -26,12 +26,14 @@ def save_blog(request):
 			cla_id = form.cleaned_data['bclassifications']
 			tags = form.cleaned_data['btags'].split('#')
 			content = form.cleaned_data['bcontent']
+			mdcode = form.cleaned_data['bmdcode']
 
 			blog = Blog()
 			blog.title = title
 			blog.classifications = get_object_or_404(Classification,pk=cla_id)
 			blog.save()
 			blog.content = content
+			blog.mdcode = mdcode
 
 			for tag in tags:
 				tag_ins = get_object_or_404(Tag,pk=tag)
@@ -100,5 +102,46 @@ def delete_blog(request,blog_id,method):
 		blog.save()
 
 	return redirect(reverse('myadmin:bloglist', args=()))
+
+def change(request,blog_id):
+	blog = get_object_or_404(Blog,pk=blog_id)
+	classifications = blog.classifications
+	tags = blog.tags.all()
+	mdcode = blog.mdcode
+	bform = BlogForm()
+
+	context = {
+		'blog':blog,
+		'classification':classifications,
+		'tags':tags,
+		'mdcode':mdcode,
+		'bform':bform,
+	}
+	return render(request,'myadmin/blog_change.html',context)
+
+def save_change(request,blog_id):
+	if request.method == 'POST':
+		form = BlogForm(request.POST)
+		if form.is_valid():
+			title = form.cleaned_data['btitle']
+			cla_id = form.cleaned_data['bclassifications']
+			tags = form.cleaned_data['btags'].split('#')
+			content = form.cleaned_data['bcontent']
+			mdcode = form.cleaned_data['bmdcode']
+
+			blog = get_object_or_404(Blog,pk=blog_id)
+			blog.title = title
+			blog.classifications = get_object_or_404(Classification,pk=cla_id)
+			blog.save()
+			blog.content = content
+			blog.mdcode = mdcode
+			blog.publish = True
+
+			for tag in tags:
+				tag_ins = get_object_or_404(Tag,pk=tag)
+				blog.tags.add(tag_ins)
+
+			blog.save()
+		return redirect(reverse('myadmin:bloglist', args=()))
 
 

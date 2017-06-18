@@ -12,3 +12,4 @@ class BlogForm(forms.Form):
 	btags = forms.CharField(widget=forms.TextInput(attrs={'style':'display:none'}))
 	bclassifications = forms.CharField(widget=forms.TextInput(attrs={'style':'display:none'}))
 	bcontent = forms.CharField(widget=forms.Textarea(attrs={'style':'display:none'}))
+	bmdcode = forms.CharField(widget=forms.Textarea(attrs={'style':'display:none'}))

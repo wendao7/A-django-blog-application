@@ -1,6 +1,6 @@
 {% extends "myadmin/adminCommon.html" %}
 {% block myadmin_title%}
-  创建博文|winton
+  编辑博文|winton
 {% endblock %}
 
 {% load static %}
@@ -34,7 +34,7 @@
             </div>
             <div class="col s10 offset-s1">
                     <br />
-                    <h5 class="left-align">创建新的博文</h5>
+                    <h5 class="left-align">编辑博文</h5>
                     <div class="divider"></div>
             </div>
 
@@ -42,7 +42,7 @@
                 {% csrf_token%}
                 <div class="row">
                     <div class="input-field col s3 offset-s1">
-                        <input id="blog_title" type="text" class="validate" name="blog_title">
+                        <input id="blog_title" type="text" class="validate" name="blog_title" value="{{ blog.title }}">
                         <label for="blog_title">博客标题</label>
                     </div>
 
@@ -50,13 +50,11 @@
                         <h6 class="left-align">博客类别</h6>
                         <div id="classifications_container" >
                         {% block classifications %}
-                            {% if classifications %}
-                                {% for classification in classifications %}
-                                    <p>
-                                      <input class="with-gap" name="group1" type="radio" id="{{ classification.id}}" value="{{classification.id}}" />
-                                      <label for="{{ classification.id}}">{{ classification.title}}</label>
-                                    </p>
-                                {% endfor %}
+                            {% if classification %}
+                                <p>
+                                  <input class="with-gap" name="group1" type="radio" id="{{ classification.id}}" value="{{classification.id}}" checked="checked" />
+                                  <label for="{{ classification.id}}">{{ classification.title}}</label>
+                                </p>
                             {% endif %}
                         {% endblock %}
                         </div>
@@ -69,7 +67,7 @@
                             {% if tags %}
                                 {% for tag in tags %}
                                     <p>
-                                      <input type="checkbox" id="{{tag}}" value="{{tag.id}}" name="tags" />
+                                      <input type="checkbox" id="{{tag}}" value="{{tag.id}}" name="tags" checked="checked" />
                                       <label for="{{tag}}">{{tag.title}}</label>
                                     </p>
                                 {% endfor %}
@@ -90,7 +88,7 @@
         </div>
     </div>
     <button class="btn-large  red lighten-2 waves-effect waves-light" id="createblog">生成</button>
-    <form action="{% url 'myadmin:save_blog'%}" method="POST">
+    <form action="{% url 'myadmin:save_change' blog.id %}" method="POST">
         {% csrf_token %}
         {{ bform }}
         <input type="submit" name="submit" value="提交博客" class="red lighten-1 btn-large waves-effect waves-light">
@@ -111,7 +109,7 @@
                 height  : 640,
                 syncScrolling : "single",
                 path    : '{% static "/myadmin/lib/" %}',
-                saveHTMLToTextarea : true
+                saveHTMLToTextarea : true,
             });
         });
 
@@ -121,6 +119,8 @@
             $("label[for='id_btags']").hide();
             $("label[for='id_bcontent']").hide();
             $("label[for='id_bmdcode']").hide();
+
+            $(".editormd-markdown-textarea").val("{{ mdcode }}");
 
             $("#createblog").click(function(event) {
                 if ($('#blog_title').val().length == 0){

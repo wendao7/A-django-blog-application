@@ -78,7 +78,7 @@
                 <br />
                 {% csrf_token%}
                 {{ commentSub }}
-                <a class="ui blue button" id="message" href="{% url 'users:login' %}">{{ message }}</a>
+                <a class="ui blue button" id="message" href="/accounts/login">{{ message }}</a>
                 <input type="submit" name="submit" value="评论" class="ui blue icon button commentsub">
             </form>
 
